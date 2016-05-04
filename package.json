@@ -1,6 +1,6 @@
 {
   "name": "butter-provider-vodo",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A Butter provider for VODO.net",
   "main": "index.js",
   "butter": {
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/butterproviders/butter-provider-vodo#readme",
   "dependencies": {
     "axios": "^0.11.0",
+    "butter-provider": "^0.3.1",
     "defer-request": "0.0.2",
     "lodash": "^3.10.1",
     "moment": "^2.11.1",
@@ -34,7 +35,7 @@
     "q": "^1.4.1"
   },
   "devDependencies": {
-    "butter-test-provider": "0.0.*",
+    "butter-test-provider": "0.0.4",
     "tape": "^4.5.1"
   }
 }
