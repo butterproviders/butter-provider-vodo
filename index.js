@@ -3,7 +3,7 @@
 var GenericProvider = require('butter-provider');
 var querystring = require('querystring');
 var Q = require('q');
-var request = require('request');
+var axios = require('axios');
 var inherits = require('util').inherits;
 var _ = require('lodash');
 var Datastore = require('nedb');
@@ -91,30 +91,30 @@ Vodo.prototype.updateAPI = function () {
     var self = this;
     var defer = Q.defer();
     console.info('Request to Vodo', apiUrl);
-    request({
-        uri: apiUrl,
+    axios(apiUrl, {
         strictSSL: false,
         json: true,
         timeout: 10000
-    },
-            function (err, res, data) {
-                /*
-                  data = _.map (helpers.formatForButter(data), function (item) {
-                  item.rating = item.rating.percentage * Math.log(item.rating.votes);
-                  return item;
-                  });
-                */
-                db.insert(formatForButter(data.downloads), function (err, newDocs) {
-                    if (err) {
-                        console.error('Vodo.updateAPI(): Error inserting', err);
-                    }
+    })
+    .then(res => {
+        let data = res.data
+        /*
+           data = _.map (helpers.formatForButter(data), function (item) {
+           item.rating = item.rating.percentage * Math.log(item.rating.votes);
+           return item;
+           });
+         */
+        db.insert(formatForButter(data.downloads), function (err, newDocs) {
+            if (err) {
+                console.error('Vodo.updateAPI(): Error inserting', err);
+            }
 
-                    db.find({}).limit(2).exec(function (err, docs) {
-                        //console.debug('FIND ---->', err, docs);
-                    });
-                    defer.resolve(newDocs);
-                });
+            db.find({}).limit(2).exec(function (err, docs) {
+                //console.debug('FIND ---->', err, docs);
             });
+            defer.resolve(newDocs);
+        });
+    })
 
     return defer.promise;
 };
@@ -178,13 +178,14 @@ Vodo.prototype.random = function () {
 
     function get(index) {
         var options = {
-            uri: apiUrl + Math.round((new Date()).valueOf() / 1000),
             json: true,
             timeout: 10000
         };
-        var req = _.extend(true, {}, apiUrl[index], options);
-        request(req, function (err, res, data) {
-            if (err || res.statusCode >= 400 || (data && !data.data)) {
+
+        axios(apiUrl[index], options)
+        .then( res => {
+            let data = res.data
+            if (res.statusCode >= 400 || (data && !data.data)) {
                 console.error('Vodo API endpoint \'%s\' failed.', apiUrl);
                 if (index + 1 >= apiUrl.length) {
                     return defer.reject(err || 'Status Code is above 400');
@@ -198,7 +199,7 @@ Vodo.prototype.random = function () {
             } else {
                 return defer.resolve(Common.sanitize(data.data));
             }
-        });
+        })
     }
     get(0);
 
