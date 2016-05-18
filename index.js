@@ -96,7 +96,7 @@ Vodo.prototype.updateAPI = function () {
         json: true,
         timeout: 10000
     })
-    .then(res => {
+    .then(function(res) {
         let data = res.data
         /*
            data = _.map (helpers.formatForButter(data), function (item) {
@@ -183,7 +183,7 @@ Vodo.prototype.random = function () {
         };
 
         axios(apiUrl[index], options)
-        .then( res => {
+        .then(function(res) {
             let data = res.data
             if (res.statusCode >= 400 || (data && !data.data)) {
                 console.error('Vodo API endpoint \'%s\' failed.', apiUrl);
