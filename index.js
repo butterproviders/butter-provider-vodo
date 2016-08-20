@@ -26,7 +26,7 @@ Vodo.prototype.config = {
     tabName: 'Vodo',
     type: Generic.TabType.MOVIE,
     args: {
-        urlList: Generic.Types.ARRAY
+        urlList: Generic.ArgType.ARRAY
     },
     /* should be removed */
     //subtitle: 'ysubs',
