@@ -5,7 +5,7 @@
   "main": "index.js",
   "butter": {
     "timeout": 20000,
-    "testArgs": "vodo"
+    "testArgs": "vodo?urlList=http://butter.vodo.net/popcorn',https://butter.vodo.net/popcorn',http://localhost:8080/popcorn"
   },
   "scripts": {
     "test": "tape ./node_modules/butter-test-provider/tests/*"
