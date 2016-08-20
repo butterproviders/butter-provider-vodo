@@ -1,6 +1,6 @@
 'use strict';
 
-var GenericProvider = require('butter-provider');
+var Generic = require('butter-provider');
 var querystring = require('querystring');
 var Q = require('q');
 var axios = require('axios');
@@ -11,20 +11,23 @@ var Datastore = require('nedb');
 var apiUrl = 'http://butter.vodo.net/popcorn',
     db = new Datastore();
 
-function Vodo() {
+function Vodo(args) {
     if (!(this instanceof Vodo)) {
-        return new Vodo();
+        return new Vodo(args);
     }
 
-    GenericProvider.call(this);
+    Generic.call(this, args);
 }
-inherits(Vodo, GenericProvider);
+inherits(Vodo, Generic);
 
 Vodo.prototype.config = {
     name: 'vodo',
     uniqueId: 'imdb_id',
     tabName: 'Vodo',
-    type: 'movie',
+    type: Generic.TabType.MOVIE,
+    args: {
+        urlList: Generic.Types.ARRAY
+    },
     /* should be removed */
     //subtitle: 'ysubs',
     metadata: 'trakttv:movie-metadata'
