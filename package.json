@@ -29,7 +29,7 @@
     "axios": "^0.11.0",
     "butter-provider": "^0.4.0",
     "defer-request": "0.0.2",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.1",
     "moment": "^2.11.1",
     "nedb": "^1.8.0",
     "q": "^1.4.1"
