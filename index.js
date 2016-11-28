@@ -39,7 +39,7 @@ function formatForButter(items) {
     var movieFetch = {};
     movieFetch.results = [];
     movieFetch.hasMore = (Number(items.length) > 1 ? true : false);
-    _.each(items, function (movie) {
+    items.forEach(function (movie) {
         if (movie.Quality === '3D') {
             return;
         }
@@ -82,7 +82,7 @@ function formatForButter(items) {
         }
 
         results[imdb] = ptItem;
-    });
+    })
 
     return movieFetch.results;
 }
