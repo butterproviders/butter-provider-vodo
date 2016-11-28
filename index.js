@@ -88,7 +88,7 @@ function formatForButter(items) {
 }
 
 Vodo.prototype.extractIds = function (items) {
-    return _.pluck(items.results, 'imdb_id');
+    return _.map(items.results, 'imdb_id');
 };
 
 Vodo.prototype.updateAPI = function () {
