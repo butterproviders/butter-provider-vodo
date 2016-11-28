@@ -8,8 +8,7 @@ var inherits = require('util').inherits;
 var _ = require('lodash');
 var Datastore = require('nedb');
 
-var apiUrl = 'http://butter.vodo.net/popcorn',
-    db = new Datastore();
+var db = new Datastore();
 
 function Vodo(args) {
     if (!(this instanceof Vodo)) {
@@ -17,6 +16,8 @@ function Vodo(args) {
     }
 
     Generic.call(this, args);
+    console.error (this)
+    this.apiUrl = this.args.urlList || ['http://butter.vodo.net/popcorn']
 }
 inherits(Vodo, Generic);
 
@@ -93,8 +94,8 @@ Vodo.prototype.extractIds = function (items) {
 Vodo.prototype.updateAPI = function () {
     var self = this;
     var defer = Q.defer();
-    console.info('Request to Vodo', apiUrl);
-    axios(apiUrl, {
+    console.info('Request to Vodo', this.apiUrl);
+    axios(this.apiUrl[0], {
         strictSSL: false,
         json: true,
         timeout: 10000
