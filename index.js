@@ -177,39 +177,6 @@ Vodo.prototype.fetch = function (filters) {
     return defer.promise;
 };
 
-Vodo.prototype.random = function () {
-    var defer = Q.defer();
-
-    function get(index) {
-        var options = {
-            json: true,
-            timeout: 10000
-        };
-
-        axios(apiUrl[index], options)
-        .then(function(res) {
-            let data = res.data
-            if (res.statusCode >= 400 || (data && !data.data)) {
-                console.error('Vodo API endpoint \'%s\' failed.', apiUrl);
-                if (index + 1 >= apiUrl.length) {
-                    return defer.reject(err || 'Status Code is above 400');
-                } else {
-                    get(index + 1);
-                }
-                return;
-            } else if (!data || data.status === 'error') {
-                err = data ? data.status_message : 'No data returned';
-                return defer.reject(err);
-            } else {
-                return defer.resolve(Common.sanitize(data.data));
-            }
-        })
-    }
-    get(0);
-
-    return defer.promise;
-};
-
 Vodo.prototype.detail = function (torrent_id, old_data) {
     return Q(old_data);
 };
