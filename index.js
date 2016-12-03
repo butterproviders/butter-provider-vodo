@@ -66,8 +66,7 @@ function formatForButter(items) {
                 year: movie.MovieYear,
                 genre: [movie.Genre],
                 rating: movie.MovieRating,
-                image: movie.CoverImage,
-                cover: movie.CoverImage,
+                poster: movie.CoverImage,
                 backdrop: movie.CoverImage,
                 torrents: torrents,
                 subtitle: {}, // TODO
