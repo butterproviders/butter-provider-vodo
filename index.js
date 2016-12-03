@@ -64,7 +64,7 @@ function formatForButter(items) {
                 imdb_id: imdb,
                 title: movie.MovieTitleClean.replace(/\([^)]*\)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]/g, ''),
                 year: movie.MovieYear,
-                genre: [movie.Genre],
+                genre: movie.Genre.split(','),
                 rating: movie.MovieRating,
                 poster: movie.CoverImage,
                 backdrop: movie.CoverImage,
