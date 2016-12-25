@@ -1,6 +1,6 @@
 'use strict';
 
-var Generic = require('butter-provider');
+var Provider = require('butter-provider');
 var querystring = require('querystring');
 var Q = require('q');
 var axios = require('axios');
@@ -15,19 +15,18 @@ function Vodo(args) {
         return new Vodo(args);
     }
 
-    Generic.call(this, args);
+    Provider.call(this, args);
     console.error (this)
     this.apiUrl = this.args.urlList || ['http://butter.vodo.net/popcorn']
 }
-inherits(Vodo, Generic);
+inherits(Vodo, Provider);
 
 Vodo.prototype.config = {
     name: 'vodo',
     uniqueId: 'imdb_id',
     tabName: 'Vodo',
-    type: Generic.TabType.MOVIE,
     args: {
-        urlList: Generic.ArgType.ARRAY
+        urlList: Provider.ArgType.ARRAY
     },
     /* should be removed */
     //subtitle: 'ysubs',
@@ -72,7 +71,7 @@ function formatForButter(items) {
                 subtitle: {}, // TODO
                 trailer: false,
                 synopsis: movie.Synopsis || 'No synopsis available.',
-                type: 'movie'
+                type: Provider.ItemType.MOVIE
             };
 
             movieFetch.results.push(ptItem);
