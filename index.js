@@ -25,6 +25,15 @@ Vodo.prototype.config = {
     name: 'vodo',
     uniqueId: 'imdb_id',
     tabName: 'Vodo',
+    filters: {
+        sorters: {
+            popularity: 'Popularity',
+            updated: 'Updated',
+            year: 'Year',
+            alphabet: 'Alphabetical',
+            rating: 'Rating'
+        }
+    },
     args: {
         urlList: Provider.ArgType.ARRAY
     },
