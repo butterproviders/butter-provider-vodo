@@ -16,8 +16,7 @@ function Vodo(args) {
     }
 
     Provider.call(this, args);
-    console.error (this)
-    this.apiUrl = this.args.urlList || ['http://butter.vodo.net/popcorn']
+    this.apiUrl = this.args.urlList
 }
 inherits(Vodo, Provider);
 
@@ -33,6 +32,9 @@ Vodo.prototype.config = {
             alphabet: 'Alphabetical',
             rating: 'Rating'
         }
+    },
+    defaults: {
+        urlList: ['http://butter.vodo.net/popcorn']
     },
     args: {
         urlList: Provider.ArgType.ARRAY
