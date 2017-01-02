@@ -4,8 +4,8 @@
   "description": "A Butter provider for VODO.net",
   "main": "index.js",
   "butter": {
-    "timeout": 20000,
-    "testArgs": "vodo?urlList=http://butter.vodo.net/popcorn',https://butter.vodo.net/popcorn',http://localhost:8080/popcorn"
+      "timeout": 20000,
+      "testArgs": "vodo?urlList=[\"http://butter.vodo.net/popcorn\", \"https://butter.vodo.net/popcorn\", \"http://localhost:8080/popcorn\"]"
   },
   "scripts": {
     "test": "tape ./node_modules/butter-provider/tests/*"
