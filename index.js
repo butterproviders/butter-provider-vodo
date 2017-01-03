@@ -143,7 +143,7 @@ Vodo.prototype.fetch = function (filters) {
 
     if (filters.keywords) {
         findOpts = {
-            title: new RegExp(filters.keywords.replace(/\s/g, '\\s+'))
+            title: new RegExp(filters.keywords.replace(/\s/g, '\\s+'), 'gi')
         };
     }
 
