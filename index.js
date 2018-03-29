@@ -1,11 +1,11 @@
 'use strict';
 
 var Provider = require('butter-provider');
-var querystring = require('querystring');
 var Q = require('q');
 var axios = require('axios');
 var _ = require('lodash');
 var Datastore = require('nedb');
+var debug = require('debug')('butter-provider-vodo');
 
 var db = new Datastore();
 
@@ -94,9 +94,8 @@ module.exports = class Vodo extends Provider {
     }
 
     updateAPI() {
-        var self = this;
         var defer = Q.defer();
-        console.info('Request to Vodo', this.apiUrl);
+        debug('Request to Vodo', this.apiUrl);
         axios(this.apiUrl[0], {
             strictSSL: false,
             json: true,
@@ -112,12 +111,9 @@ module.exports = class Vodo extends Provider {
                  */
                 db.insert(formatForButter(data.downloads), (err, newDocs) => {
                     if (err) {
-                        console.error('Vodo.updateAPI(): Error inserting', err);
+                        debug('Vodo.updateAPI(): Error inserting', err);
                     }
 
-                    db.find({}).limit(2).exec((err, docs) => {
-                        //console.debug('FIND ---->', err, docs);
-                    });
                     defer.resolve(newDocs);
                 });
             })
@@ -125,9 +121,8 @@ module.exports = class Vodo extends Provider {
         return defer.promise;
     }
     fetch(filters = {}) {
-        var self = this;
-        if (!self.fetchPromise) {
-            self.fetchPromise = this.updateAPI();
+        if (!this.fetchPromise) {
+            this.fetchPromise = this.updateAPI();
         }
 
         var defer = Q.defer();
@@ -158,7 +153,7 @@ module.exports = class Vodo extends Provider {
         var sortOpts = {};
         sortOpts[params.sort] = params.order;
 
-        self.fetchPromise.then(() => {
+        this.fetchPromise.then(() => {
             db.find(findOpts)
               .sort(sortOpts)
               .skip((filters.page - 1) * params.limit)
