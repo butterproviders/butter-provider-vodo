@@ -4,11 +4,11 @@
   "description": "A Butter provider for VODO.net",
   "main": "index.js",
   "butter": {
-      "timeout": 20000,
-      "testArgs": "vodo?urlList=[\"http://butter.vodo.net/popcorn\", \"https://butter.vodo.net/popcorn\", \"http://localhost:8080/popcorn\"]"
+    "timeout": 20000,
+    "testArgs": "vodo?urlList=[\"http://butter.vodo.net/popcorn\", \"https://butter.vodo.net/popcorn\", \"http://localhost:8080/popcorn\"]"
   },
   "scripts": {
-    "test": "tape ./node_modules/butter-provider/tests/*"
+    "test": "mocha ./node_modules/butter-provider/tests/*"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/butterproviders/butter-provider-vodo#readme",
   "dependencies": {
     "axios": "^0.11.0",
-    "butter-provider": "^0.9.7",
+    "butter-provider": "butterproviders/butter-provider",
     "defer-request": "0.0.2",
     "lodash": "^4.17.1",
     "moment": "^2.11.1",
@@ -35,6 +35,7 @@
     "q": "^1.4.1"
   },
   "devDependencies": {
-    "tape": "^4.5.1"
+    "chai": "^4.1.2",
+    "mocha": "^5.0.5"
   }
 }
