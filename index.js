@@ -23,10 +23,12 @@ const defaultConfig = {
         }
     },
     defaults: {
-        urlList: ['http://butter.vodo.net/popcorn']
+        urlList: ['http://butter.vodo.net/popcorn'],
+        timeout: 10000
     },
     argTypes: {
-        urlList: Provider.ArgType.ARRAY
+        urlList: Provider.ArgType.ARRAY,
+        timeout: Provider.ArgType.NUMBER
     },
     /* should be removed */
     //subtitle: 'ysubs',
@@ -99,7 +101,7 @@ module.exports = class Vodo extends Provider {
         axios(this.apiUrl[0], {
             strictSSL: false,
             json: true,
-            timeout: 10000
+            timeout: this.args.timeout
         })
             .then((res) => {
                 let data = res.data
