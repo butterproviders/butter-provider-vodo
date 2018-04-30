@@ -1,9 +1,7 @@
 'use strict';
 
 var Provider = require('butter-provider');
-var Q = require('q');
 var axios = require('axios');
-var _ = require('lodash');
 var Datastore = require('nedb');
 var debug = require('debug')('butter-provider-vodo');
 
@@ -79,7 +77,7 @@ function formatForButter(items) {
 
             movieFetch.results.push(ptItem);
         } else {
-            _.extend(ptItem.torrents, torrents);
+            pItem.torrents = Object.assign({}, torrents)
         }
 
         results[imdb] = ptItem;
@@ -96,38 +94,39 @@ module.exports = class Vodo extends Provider {
     }
 
     updateAPI() {
-        var defer = Q.defer();
-        debug('Request to Vodo', this.apiUrl);
-        axios(this.apiUrl[0], {
-            strictSSL: false,
-            json: true,
-            timeout: this.args.timeout
-        })
-            .then((res) => {
-                let data = res.data
-                /*
-                   data = _.map (helpers.formatForButter(data), (item) => {
-                   item.rating = item.rating.percentage * Math.log(item.rating.votes);
-                   return item;
-                   });
-                 */
-                db.insert(formatForButter(data.downloads), (err, newDocs) => {
-                    if (err) {
-                        debug('Vodo.updateAPI(): Error inserting', err);
-                    }
-
-                    defer.resolve(newDocs);
-                });
+        debug ('update API')
+        return new Promise((accept, reject) => {
+            debug('Request to Vodo', this.apiUrl);
+            axios(this.apiUrl[0], {
+                strictSSL: false,
+                json: true,
+                timeout: this.args.timeout
             })
+                .then((res) => {
+                    let data = res.data
+                    /*
+                       data = _.map (helpers.formatForButter(data), (item) => {
+                       item.rating = item.rating.percentage * Math.log(item.rating.votes);
+                       return item;
+                       });
+                     */
+                    db.insert(formatForButter(data.downloads), (err, newDocs) => {
+                        if (err) {
+                            debug('Vodo.updateAPI(): Error inserting', err);
+                            reject(err)
+                        }
 
-        return defer.promise;
+                        accept(newDocs);
+                    });
+                })
+        })
     }
+
     fetch(filters = {}) {
         if (!this.fetchPromise) {
             this.fetchPromise = this.updateAPI();
         }
 
-        var defer = Q.defer();
         var params = {
             sort: 'rating',
             limit: 50
@@ -155,28 +154,34 @@ module.exports = class Vodo extends Provider {
         var sortOpts = {};
         sortOpts[params.sort] = params.order;
 
-        this.fetchPromise.then(() => {
-            db.find(findOpts)
-              .sort(sortOpts)
-              .skip((filters.page - 1) * params.limit)
-              .limit(Number(params.limit))
-              .exec((err, docs) => {
-                  docs.forEach((entry) => {
-                      entry.type = 'movie';
-                  });
+        return this.fetchPromise
+                   .then(() => (
+                       new Promise((accept, reject) => (
+                           db.find(findOpts)
+                             .sort(sortOpts)
+                             .skip((filters.page - 1) * params.limit)
+                             .limit(Number(params.limit))
+                             .exec((err, docs) => {
+                                 if (err) {
+                                     return reject(err)
+                                 }
 
-                  return defer.resolve({
-                      results: docs,
-                      hasMore: docs.length ? true : false
-                  });
-              });
-        });
+                                 docs.forEach((entry) => {
+                                     entry.type = 'movie';
+                                 });
 
-        return defer.promise;
+                                 return accept({
+                                     results: docs,
+                                     hasMore: docs.length ? true : false
+                                 })
+                             })
+                       ))
+
+                   ))
     }
 
     detail (torrent_id, old_data) {
-        return Q(old_data);
+        return Promise.resolve(old_data);
     }
 }
 
