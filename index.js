@@ -57,9 +57,10 @@ function formatForButter(items) {
             peer: peers
         };
 
-        var ptItem = results[imdb];
-        if (!ptItem) {
-            ptItem = {
+        let item = results[imdb];
+
+        if (!item) {
+            item = {
                 imdb_id: imdb,
                 title: movie.MovieTitleClean.replace(/\([^)]*\)|1080p|DIRECTORS CUT|EXTENDED|UNRATED|3D|[()]/g, ''),
                 year: movie.MovieYear,
@@ -75,12 +76,12 @@ function formatForButter(items) {
                 type: Provider.ItemType.MOVIE
             };
 
-            movieFetch.results.push(ptItem);
+            movieFetch.results.push(item);
         } else {
-            pItem.torrents = Object.assign({}, torrents)
+            item.torrents = Object.assign({}, torrents)
         }
 
-        results[imdb] = ptItem;
+        results[imdb] = item;
     })
 
     return movieFetch.results;
@@ -94,7 +95,8 @@ module.exports = class Vodo extends Provider {
     }
 
     updateAPI() {
-        debug ('update API')
+        debug('update API')
+
         return new Promise((accept, reject) => {
             debug('Request to Vodo', this.apiUrl);
             axios(this.apiUrl[0], {
